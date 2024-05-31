@@ -27,7 +27,7 @@
 <body>
 <h2>설문조사</h2>
 <p>지난 2주 동안 다음과 같은 문제를 얼마나 자주 겪었는지 해당되는 항목에 표시해주세요.</p>
-    <form action="/save-survey" id="surveyForm" method="post">
+<form action="/save-survey" id="surveyForm" method="post">
     <table>
         <tr>
             <th class="question-cell">질문</th>
@@ -219,7 +219,7 @@
     <input type="number" id="goalInput" name="goal" min="1" max="100" required>
     <br><br>
     <button type="submit">제출</button>
-    </form>
+</form>
 <!-- 모든 설문에 답하게 하는 스크립트 -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -227,7 +227,7 @@
 
         form.addEventListener("submit", function(event) {
             var questions = form.querySelectorAll(".question-cell");
-			var answers = form.querySelectorAll(".answer-cell");
+            var answers = form.querySelectorAll(".answer-cell");
             var checkedCount = 1; //표 맨 위 '질문' 제외
 
             answers.forEach(function(answer) {

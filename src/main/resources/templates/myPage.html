@@ -12,6 +12,7 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      background-color:aliceblue;
     }
     .header {
       display: flex;
@@ -20,8 +21,9 @@
       position: absolute;
       top: 0;
       width: 100%;
-      padding: 20px;
+      padding: 10px;
       box-sizing: border-box;
+      background-color: #bdeaf9; /* 추가 */
     }
     .left {
       font-size: 24px;
@@ -34,11 +36,16 @@
     button {
       padding: 10px 20px;
       cursor: pointer;
+      background-color: #fcfcf4; /* 아이보리색 */ /*추가*/
+      border: 1px solid #ccc; /* 테두리 추가 */
+      border-radius: 5px; /*추가*/
+      font-weight: bold; /*추가*/
+      min-width: 200px; /* 최소 너비 설정 */
+      box-sizing: border-box; /* 테두리를 고려하여 크기 조정 */
     }
     img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
+      width: 70%;
+      height: 50px;
       margin: 20px;
     }
     .actions {
@@ -50,19 +57,17 @@
 </head>
 <body>
 <div class="header">
-  <div class="left">Byte the Blues</div>
+  <div class="left"><img src="./Logo.png" alt="Byte the Blues"></div>
   <div class="right">
     <button onclick="location.href='/logout'">로그아웃</button>
     <button onclick="location.href='/home'">홈으로</button>
   </div>
 </div>
-
-  <div class="actions">
-    <button onclick="location.href='/edit-profile'">내정보 변경하기</button>
-    <form action="/delete-account" method="post" onsubmit="return confirm('정말로 회원 탈퇴를 하시겠습니까?');">
-      <button type="submit">회원 탈퇴</button>
-    </form>
-  </div>
-
+<div class="actions">
+  <button onclick="location.href='/edit-profile'">내정보 변경하기</button>
+  <form action="/delete-account" method="post" onsubmit="return confirm('정말로 회원 탈퇴를 하시겠습니까?');">
+    <button type="submit">회원 탈퇴</button>
+  </form>
+</div>
 </body>
 </html>

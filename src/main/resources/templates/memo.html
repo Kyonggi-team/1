@@ -46,7 +46,7 @@
             margin-bottom: 15px;
         }
 
-        textarea {
+        textarea, input[type="time"], select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -64,36 +64,152 @@
             display: block;
             margin-top: 10px;
         }
+
+        .mood-selection img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .mood-selection img.selected {
+            border: 2px solid #007BFF;
+            border-radius: 50%;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
     </style>
+    <script>
+        function selectMood(mood) {
+            document.querySelectorAll('.mood-selection img').forEach(img => {
+                img.classList.remove('selected');
+            });
+            document.getElementById(mood).classList.add('selected');
+            document.getElementById('mood').value = mood;
+        }
+    </script>
 </head>
 <body>
 <nav>
     <span>Byte The Bive</span>
 </nav>
 <div class="container">
-    <!-- Add New Memo Form -->
-    <h2>Add New Memo</h2>
-    <form action="/memo/memo/save" method="post">
+
+    <!-- Mood Form -->
+    <h2>여기서 오늘의 기분을 선택하고 업데이트하세요!</h2>
+    <form action="/memo/memo/mood/save" method="post">
         <input type="hidden" name="date" th:value="${date}">
-        <div class="form-group">
-            <label for="content">Add New Memo</label>
-            <textarea id="content" name="content" rows="3"></textarea>
+        <input type="hidden" id="mood" name="mood" required>
+        <div class="form-group mood-selection">
+            <img id="Happy" src="/assets/mood/2.png" onclick="selectMood('Happy')" alt="Happy">
+            <img id="Sad" src="/assets/mood/4.png" onclick="selectMood('Sad')" alt="Sad">
+            <img id="Neutral" src="/assets/mood/5.png" onclick="selectMood('Neutral')" alt="Neutral">
+            <img id="Angry" src="/assets/mood/1.png" onclick="selectMood('Angry')" alt="Angry">
+            <img id="Excited" src="/assets/mood/3.png" onclick="selectMood('Excited')" alt="Excited">
         </div>
+        <div th:if="${moodSaved}" class="success">
+            기분선택완료!
+        </div>
+
+        <div th:if="${moodUpdated}" class="success">
+            기분을 업데이트했습니다!
+        </div>
+
         <input class="button" type="submit" value="Save">
     </form>
 
-    <!-- Existing Memos -->
-    <h2>Existing Memos for <span th:text="${date}"></span></h2>
-    <ul>
-        <li th:each="memo : ${memos}">
-            <span th:text="${memo.content}"></span>
-            <a th:href="@{/memo/memo/edit/{id}(id=${memo.id})}">Edit</a> <!-- 수정 버튼 추가 -->
-        </li>
-    </ul>
+
+
+
+    <h2>오늘의 메모</h2>
+    <form th:action="@{/memo/memo/saveAll}" method="post">
+        <input type="hidden" name="date" th:value="${date}">
+
+        <!-- Memo Section -->
+        <h3>Memo</h3>
+        <input type="hidden" name="id" th:value="${memos.size() > 0 ? memos[0].id : ''}">
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" rows="10" cols="50" th:text="${memos.size() > 0 ? memos[0].content : ''}"></textarea>
+        </div>
+
+        <!-- Sleep Section -->
+        <h3>Sleep Time</h3>
+        <div class="form-group">
+            <label for="start">Start Time (hh:mm)</label>
+            <input type="time" id="start" name="start" th:value="${sleeps.size() > 0 ? sleeps[0].start : ''}">
+        </div>
+        <div class="form-group">
+            <label for="end">End Time (hh:mm)</label>
+            <input type="time" id="end" name="end" th:value="${sleeps.size() > 0 ? sleeps[0].end : ''}">
+        </div>
+
+        <!-- Meal Section -->
+        <h3>식사</h3>
+
+        <input type="hidden" id="meals-data" th:value="${mealsJson}"><!--추가-->
+        <div class="form-group toggle-btn">
+            <label>
+                <input type="radio" name="mealType" value="Breakfast" onclick="showMealData('Breakfast')"> 아침
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Lunch" onclick="showMealData('Lunch')"> 점심
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Dinner" onclick="showMealData('Dinner')"> 저녁
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Snack" onclick="showMealData('Snack')"> 간식
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="mealTime">시간</label>
+            <input type="time" id="mealTime" name="mealTime">
+
+        </div>
+        <div class="form-group">
+            <label for="mealMenus">메뉴 (쉼표로 구분)</label>
+            <input type="text" id="mealMenus" name="mealMenus">
+
+
+        </div>
+        <div class="form-group">
+            <label for="mealRating">평점</label>
+            <input type="number" id="mealRating" name="mealRating" min="1" max="5">
+        </div>
+
+        <input class="button" type="submit" value="Save Changes">
+    </form>
 </div>
 <footer>
-    <a href="/" class="button">Home</a>
-    <a href="/mypage" class="button">Mypage</a>
+    <span>© 2024 Byte The Bive</span>
 </footer>
+<script>
+    function showMealData(mealType) {
+        const meals = JSON.parse(document.getElementById('meals-data').value);
+        const meal = meals.find(m => m.mealType === mealType);
+
+        if (meal) {
+            document.getElementById('mealTime').value = meal.time;
+            //document.getElementById('mealTime').value = meal.time.slice(0, 5)
+            document.getElementById('mealMenus').value = meal.menus.join(', ');
+            document.getElementById('mealRating').value = meal.rating;
+        } else {
+            document.getElementById('mealTime').value = '';
+            document.getElementById('mealMenus').value = '';
+            document.getElementById('mealRating').value = '';
+        }
+    }
+</script>
+
 </body>
 </html>

@@ -25,6 +25,7 @@ public class ExerciseService {
                 .orElseGet(() -> {
                     Exercise newExercise = Exercise.builder()
                             .id(member.getId())
+                            .member(member)
                             .exercise(null)
                             .goal(20)
                             .build();
