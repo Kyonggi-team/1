@@ -43,6 +43,7 @@ public class Member implements UserDetails {
 
 
 
+
     @Builder
     public Member(String email , String password, String phoneNumber,String name){
         this.email=email;
