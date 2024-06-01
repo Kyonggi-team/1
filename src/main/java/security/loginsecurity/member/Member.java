@@ -35,6 +35,15 @@ public class Member implements UserDetails {
     @Column(name = "name",nullable = false)
     private String name;
 
+
+
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private Exercise exercise;
+
+
+
+
+
     @Builder
     public Member(String email , String password, String phoneNumber,String name){
         this.email=email;
