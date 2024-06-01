@@ -7,7 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
     <style>
-        /* 달력의 크기와 배치 */
         #calendar {
             width: 80%;
             margin: 0 auto;
@@ -16,7 +15,6 @@
             aspect-ratio: 4 / 3;
         }
 
-        /* 페이지 전체에 대한 레이아웃 */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -91,7 +89,6 @@
             margin-bottom: 60px;
         }
 
-        /* 날짜 선택 시 나타나는 프레임 */
         .day-frame {
             position: absolute;
             padding: 15px;
@@ -99,7 +96,7 @@
             border: 2px solid #007BFF;
             border-radius: 5px;
             z-index: 2000;
-            display: none; /* 기본적으로 숨겨둠 */
+            display: none;
         }
 
         .day-frame a {
@@ -157,7 +154,7 @@
                     return {
                         title: '',
                         start: mood.date,
-                        imageUrl: '/assets/mood/' + moodImageMap[mood.mood] // 각 기분에 맞는 이미지를 사용할 경로
+                        imageUrl: '/assets/mood/' + moodImageMap[mood.mood]
                     };
                 });
 
@@ -179,7 +176,6 @@
                     dayClick: function(date, jsEvent) {
                         var formattedDate = date.format('YYYY-MM-DD');
 
-                        // 날짜 클릭 시 프레임의 위치와 내용을 설정하고 표시
                         var frame = $('#day-frame');
                         frame.css({
                             left: jsEvent.pageX + 'px',
@@ -190,7 +186,6 @@
                     }
                 });
 
-                // 프레임 외부 클릭 시 프레임 숨기기
                 $(document).on('click', function(e) {
                     var frame = $('#day-frame');
                     if (!frame.is(e.target) && frame.has(e.target).length === 0) {
@@ -215,7 +210,6 @@
         <a class="calendar-button" href="/survey">P Test</a>
     </div>
     <div id="calendar"></div>
-    <!-- 날짜 선택 시 나타나는 프레임 -->
     <div id="day-frame" class="day-frame">
         <a class="memo-link" href="#">Memo</a>
         <a href="/aiDiary">AI Diary</a>

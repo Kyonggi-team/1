@@ -2,38 +2,138 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Memo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        nav, footer {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        nav {
+            top: 0;
+        }
+
+        footer {
+            bottom: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        textarea, input[type="time"], input[type="date"], input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .toggle-btn label {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>메모 수정</h1>
-<!-- 메모 수정 폼 -->
-<form th:action="@{/memo/memo/update}" method="post">
-    <input type="hidden" name="id" th:value="${memo != null ? memo.id : ''}" />
-    <div>
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" rows="10" cols="50" th:text="${memo != null ? memo.content : ''}"></textarea>
-    </div>
-    <div>
-        <button type="submit">Save Changes</button>
-    </div>
-</form>
+<nav>
+    <span>Byte The Bive</span>
+</nav>
+<div class="container">
+    <!-- 메모 수정 폼 -->
+    <h1>메모 수정</h1>
+    <form th:action="@{/memo/memo/update}" method="post">
+        <input type="hidden" name="id" th:value="${memo != null ? memo.id : ''}" />
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" rows="10" cols="50" th:text="${memo != null ? memo.content : ''}"></textarea>
+        </div>
+        <input class="button" type="submit" value="Save Changes">
+    </form>
 
-<!-- 슬립 수정 폼 -->
-<h2>Edit Sleep Time</h2>
-<form th:action="@{/memo/memo/sleep/update}" method="post">
-    <select name="sleepId">
-        <option th:each="sleep : ${sleeps}" th:value="${sleep.id}" th:text="${'Start: ' + sleep.start + ', End: ' + sleep.end + ', Duration: ' + sleep.durationInMinutes + ' minutes'}"></option>
-    </select>
-    <button type="submit">Edit Sleep</button>
-</form>
+    <!-- 슬립 수정 폼 -->
+    <h2>Edit Sleep Time</h2>
+    <form th:action="@{/memo/memo/sleep/update}" method="post">
+        <div class="form-group">
+            <label for="start">Start Time (hh:mm)</label>
+            <input type="time" id="start" name="start" required>
+        </div>
+        <div class="form-group">
+            <label for="end">End Time (hh:mm)</label>
+            <input type="time" id="end" name="end" required>
+        </div>
+        <input class="button" type="submit" value="Update Sleep">
+    </form>
 
-<!-- 밀 수정 폼 -->
-<h2>Edit Meal</h2>
-<form th:action="@{/memo/memo/meals/update}" method="post">
-    <select name="mealId">
-        <option th:each="meal : ${meals}" th:value="${meal.id}" th:text="${'Time: ' + meal.time + ', Menus: ' + meal.menus + ', Rating: ' + meal.rating}"></option>
-    </select>
-    <button type="submit">Edit Meal</button>
-</form>
+    <!-- 밀 수정 폼 -->
+    <h2>Edit Meal</h2>
+    <form th:action="@{/memo/memo/meals/update}" method="post">
+        <div class="form-group toggle-btn">
+            <label>
+                <input type="radio" name="mealType" value="Breakfast"> 아침
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Lunch"> 점심
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Dinner"> 저녁
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Snack"> 간식
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="mealTime">Time</label>
+            <input type="time" id="mealTime" name="mealTime" required>
+        </div>
+        <div class="form-group">
+            <label for="mealMenus">Menus (comma separated)</label>
+            <input type="text" id="mealMenus" name="mealMenus" required>
+        </div>
+        <div class="form-group">
+            <label for="mealRating">Rating</label>
+            <input type="number" id="mealRating" name="mealRating" min="1" max="5" required>
+        </div>
+        <input class="button" type="submit" value="Update Meal">
+    </form>
+</div>
+<footer>
+    <span>&copy; 2024 Byte The Bive</span>
+</footer>
 </body>
 </html>
-

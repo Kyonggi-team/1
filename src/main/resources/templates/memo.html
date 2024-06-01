@@ -95,6 +95,22 @@
             document.getElementById(mood).classList.add('selected');
             document.getElementById('mood').value = mood;
         }
+
+        function showMealData(mealType) {
+            const meals = JSON.parse(document.getElementById('meals-data').value);
+            const meal = meals.find(m => m.mealType === mealType);
+
+            if (meal) {
+                document.getElementById('mealTime').value = meal.time;
+                //document.getElementById('mealTime').value = meal.time.slice(0, 5)
+                document.getElementById('mealMenus').value = meal.menus.join(', ');
+                document.getElementById('mealRating').value = meal.rating;
+            } else {
+                document.getElementById('mealTime').value = '';
+                document.getElementById('mealMenus').value = '';
+                document.getElementById('mealRating').value = '';
+            }
+        }
     </script>
 </head>
 <body>
@@ -126,76 +142,65 @@
         <input class="button" type="submit" value="Save">
     </form>
 
-    <!-- Add New Memo Form -->
-    <h2>Add New Memo</h2>
-    <form action="/memo/memo/save" method="post">
+    <h2>오늘의 메모</h2>
+    <form th:action="@{/memo/memo/saveAll}" method="post">
         <input type="hidden" name="date" th:value="${date}">
-        <div class="form-group">
-            <label for="content">Add New Memo</label>
-            <textarea id="content" name="content" rows="3"></textarea>
-        </div>
-        <input class="button" type="submit" value="Save">
-    </form>
 
-    <!-- Sleep Time Form -->
-    <h2>Add Sleep Time</h2>
-    <form action="/memo/memo/sleep/save" method="post">
-        <input type="hidden" name="date" th:value="${date}">
+        <!-- Memo Section -->
+        <h3>Memo</h3>
+        <input type="hidden" name="id" th:value="${memos != null && memos.size() > 0 ? memos[0].id : ''}">
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" rows="10" cols="50" th:text="${memos != null && memos.size() > 0 ? memos[0].content : ''}"></textarea>
+        </div>
+
+        <!-- Sleep Section -->
+        <h3>Sleep Time</h3>
         <div class="form-group">
             <label for="start">Start Time (hh:mm)</label>
-            <input type="time" id="start" name="start" required>
+            <input type="time" id="start" name="start" th:value="${sleeps != null && sleeps.size() > 0 ? sleeps[0].start : ''}">
         </div>
         <div class="form-group">
             <label for="end">End Time (hh:mm)</label>
-            <input type="time" id="end" name="end" required>
+            <input type="time" id="end" name="end" th:value="${sleeps != null && sleeps.size() > 0 ? sleeps[0].end : ''}">
         </div>
-        <input class="button" type="submit" value="Save">
-    </form>
 
-    <h2>Add New Meal</h2>
-    <form action="/memo/memo/meals/save" method="post">
-        <div class="form-group">
-            <label for="mealDate">Date</label>
-            <input type="date" id="mealDate" name="date" th:value="${date}" required>
-        </div>
+        <!-- Meal Section -->
+        <h3>식사</h3>
+        <input type="hidden" id="meals-data" th:value="${mealsJson}"><!--추가-->
         <div class="form-group toggle-btn">
             <label>
-                <input type="radio" name="mealType" value="Breakfast"> 아침
+                <input type="radio" name="mealType" value="Breakfast" onclick="showMealData('Breakfast')"> 아침
             </label>
             <label>
-                <input type="radio" name="mealType" value="Lunch"> 점심
+                <input type="radio" name="mealType" value="Lunch" onclick="showMealData('Lunch')"> 점심
             </label>
             <label>
-                <input type="radio" name="mealType" value="Dinner"> 저녁
+                <input type="radio" name="mealType" value="Dinner" onclick="showMealData('Dinner')"> 저녁
             </label>
             <label>
-                <input type="radio" name="mealType" value="Snack"> 간식
+                <input type="radio" name="mealType" value="Snack" onclick="showMealData('Snack')"> 간식
             </label>
         </div>
+
         <div class="form-group">
-            <label for="mealTime">Time</label>
-            <input type="time" id="mealTime" name="mealTime" required>
+            <label for="mealTime">시간</label>
+            <input type="time" id="mealTime" name="mealTime">
         </div>
         <div class="form-group">
-            <label for="mealMenus">Menus (comma separated)</label>
-            <input type="text" id="mealMenus" name="mealMenus" required>
+            <label for="mealMenus">메뉴 (쉼표로 구분)</label>
+            <input type="text" id="mealMenus" name="mealMenus">
         </div>
         <div class="form-group">
-            <label for="mealRating">Rating</label>
-            <input type="number" id="mealRating" name="mealRating" min="1" max="5" required>
+            <label for="mealRating">평점</label>
+            <input type="number" id="mealRating" name="mealRating" min="1" max="5">
         </div>
-        <input class="button" type="submit" value="Save">
+
+        <input class="button" type="submit" value="Save Changes">
     </form>
-
-
-
-    <div>
-        <a th:if="${not #lists.isEmpty(memos)}" th:href="@{/memo/memo/edit/{id}(id=${memos[0].id})}" class="button">Edit Memo</a>
-    </div>
-
 </div>
 <footer>
-    <span>&copy; 2024 Byte The Bive</span>
+    <span>© 2024 Byte The Bive</span>
 </footer>
 </body>
 </html>

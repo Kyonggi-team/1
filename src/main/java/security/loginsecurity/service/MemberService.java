@@ -70,4 +70,18 @@ public class MemberService {
         member.setPassword(newPassword);  // 암호화된 비밀번호 설정
         memberRepository.save(member);
     }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with the email: " + email));
+    }
+
+
+
+
+    ////cnrk
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with the id: " + id));
+    }
 }

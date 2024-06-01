@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
         body {
             display: flex;
             justify-content: center;
@@ -12,28 +13,64 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            background-color:aliceblue; /*배경 색상*/ /*추가*/
+            font-family: 'Jua', sans-serif;
         }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-family: "Comic Sans MS", cursive;
         }
+
         form {
             display: flex;
             flex-direction: column;
-            width: 300px;
+            width: 400px;
+            background-color: #a5e5e2; /* form 배경색 */ /*추가*/
+            padding: 20px; /*여백 크기*/ /*추가*/
+            border-radius: 10px; /* 모서리 둥글게 */ /*추가*/
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */ /*추가*/
         }
+        .submit{ /*div class submit 버튼 가운데 정렬*/
+            text-align: center;
+        }
+
+        label { /*추가*/
+            display: inline-block;
+            width: 30%; /* label 너비 조정 */
+            text-align: right; /* label 텍스트를 오른쪽으로 정렬 */
+            margin-right: 10px; /* label과 input 간격 조정*/
+        }
+
         input, button {
             padding: 8px;
             margin-bottom: 10px;
         }
+
         .error {
             color: red; /* 에러 메시지는 빨간색으로 표시 */
             margin-top: -10px;
             margin-bottom: 10px;
         }
+
+        button[type="submit"] {/*추가*/
+            background-color: #72d49d; /* 버튼 배경색 설정 */
+            cursor: pointer; /*이 버튼에 커서를 올리면 커서가 손으로 바뀜*/
+            width: 50%;
+            transition: background-color 0.3s ease; /* 배경색 변화는 0.3초 동안 이루어짐 */
+            border-radius: 10px; /* 모서리 둥글게 */ /*추가*/
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */ /*추가*/
+            font-family: "Comic Sans MS", cursive;
+        }
+
+        button[type="submit"]:hover { /*추가*/
+            background-color: #66c3d0; /* signup 버튼에 올리면 색이 변함 */
+        }
     </style>
 </head>
 <body>
+<img src="c:\Users\fgh30\Desktop\기초캡스톤_로고-removebg-preview.png" alt="Logo" height="100px" width="300px">
 <h2>Sign Up</h2>
 <form action="/member" method="post">
     <div>
@@ -57,7 +94,9 @@
         <label for="phoneNumber">전화번호:</label>
         <input type="text" id="phoneNumber" name="phoneNumber" required>
     </div>
-    <button type="submit">Sign Up</button>
+    <div class="submit">
+        <button type="submit">Sign Up</button>
+    </div>
 </form>
 <script>
     function validatePassword() {

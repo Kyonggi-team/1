@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import security.loginsecurity.exercise.ExerciseService;
 import security.loginsecurity.home.service.CalendarService;
 import security.loginsecurity.member.Member;
@@ -62,5 +61,10 @@ public class HomeController {
     @GetMapping("/aiDiary")
     public String redirectToAiDiary() {
         return "redirect:/aiDiary.html";
+    }
+
+    @GetMapping("/pTest")
+    public String redirectToPTest(){
+        return "redirect:/survey";
     }
 }
