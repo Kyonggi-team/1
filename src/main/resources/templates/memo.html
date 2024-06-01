@@ -46,7 +46,7 @@
             margin-bottom: 15px;
         }
 
-        textarea {
+        textarea, input[type="time"], select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -64,13 +64,68 @@
             display: block;
             margin-top: 10px;
         }
+
+        .mood-selection img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .mood-selection img.selected {
+            border: 2px solid #007BFF;
+            border-radius: 50%;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
     </style>
+    <script>
+        function selectMood(mood) {
+            document.querySelectorAll('.mood-selection img').forEach(img => {
+                img.classList.remove('selected');
+            });
+            document.getElementById(mood).classList.add('selected');
+            document.getElementById('mood').value = mood;
+        }
+    </script>
 </head>
 <body>
 <nav>
     <span>Byte The Bive</span>
 </nav>
 <div class="container">
+
+    <!-- Mood Form -->
+    <h2>여기서 오늘의 기분을 선택하고 업데이트하세요!</h2>
+    <form action="/memo/memo/mood/save" method="post">
+        <input type="hidden" name="date" th:value="${date}">
+        <input type="hidden" id="mood" name="mood" required>
+        <div class="form-group mood-selection">
+            <img id="Happy" src="/assets/mood/happy.png" onclick="selectMood('Happy')" alt="Happy">
+            <img id="Sad" src="/assets/mood/sad.png" onclick="selectMood('Sad')" alt="Sad">
+            <img id="Neutral" src="/assets/mood/neutral.png" onclick="selectMood('Neutral')" alt="Neutral">
+            <img id="Angry" src="/assets/mood/angry.png" onclick="selectMood('Angry')" alt="Angry">
+            <img id="Excited" src="/assets/mood/excited.png" onclick="selectMood('Excited')" alt="Excited">
+        </div>
+        <div th:if="${moodSaved}" class="success">
+            기분선택완료!
+        </div>
+
+        <div th:if="${moodUpdated}" class="success">
+            기분을 업데이트했습니다!
+        </div>
+
+        <input class="button" type="submit" value="Save">
+    </form>
+
     <!-- Add New Memo Form -->
     <h2>Add New Memo</h2>
     <form action="/memo/memo/save" method="post">
@@ -82,18 +137,65 @@
         <input class="button" type="submit" value="Save">
     </form>
 
-    <!-- Existing Memos -->
-    <h2>Existing Memos for <span th:text="${date}"></span></h2>
-    <ul>
-        <li th:each="memo : ${memos}">
-            <span th:text="${memo.content}"></span>
-            <a th:href="@{/memo/memo/edit/{id}(id=${memo.id})}">Edit</a> <!-- 수정 버튼 추가 -->
-        </li>
-    </ul>
+    <!-- Sleep Time Form -->
+    <h2>Add Sleep Time</h2>
+    <form action="/memo/memo/sleep/save" method="post">
+        <input type="hidden" name="date" th:value="${date}">
+        <div class="form-group">
+            <label for="start">Start Time (hh:mm)</label>
+            <input type="time" id="start" name="start" required>
+        </div>
+        <div class="form-group">
+            <label for="end">End Time (hh:mm)</label>
+            <input type="time" id="end" name="end" required>
+        </div>
+        <input class="button" type="submit" value="Save">
+    </form>
+
+    <h2>Add New Meal</h2>
+    <form action="/memo/memo/meals/save" method="post">
+        <div class="form-group">
+            <label for="mealDate">Date</label>
+            <input type="date" id="mealDate" name="date" th:value="${date}" required>
+        </div>
+        <div class="form-group toggle-btn">
+            <label>
+                <input type="radio" name="mealType" value="Breakfast"> 아침
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Lunch"> 점심
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Dinner"> 저녁
+            </label>
+            <label>
+                <input type="radio" name="mealType" value="Snack"> 간식
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="mealTime">Time</label>
+            <input type="time" id="mealTime" name="mealTime" required>
+        </div>
+        <div class="form-group">
+            <label for="mealMenus">Menus (comma separated)</label>
+            <input type="text" id="mealMenus" name="mealMenus" required>
+        </div>
+        <div class="form-group">
+            <label for="mealRating">Rating</label>
+            <input type="number" id="mealRating" name="mealRating" min="1" max="5" required>
+        </div>
+        <input class="button" type="submit" value="Save">
+    </form>
+
+
+
+    <div>
+        <a th:if="${not #lists.isEmpty(memos)}" th:href="@{/memo/memo/edit/{id}(id=${memos[0].id})}" class="button">Edit Memo</a>
+    </div>
+
 </div>
 <footer>
-    <a href="/" class="button">Home</a>
-    <a href="/mypage" class="button">Mypage</a>
+    <span>&copy; 2024 Byte The Bive</span>
 </footer>
 </body>
 </html>

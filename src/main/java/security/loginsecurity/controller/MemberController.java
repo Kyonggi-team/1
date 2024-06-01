@@ -38,10 +38,6 @@ public class MemberController {
     public String signup(){
         return "signup";
     }
-    @GetMapping("/home")
-    public String home(){
-        return "home";
-    }
     @GetMapping("/myPage")
     public String myPage(){
         return "myPage";

@@ -35,19 +35,18 @@ public class MemoService {
         return memo.map(m -> new MemoDto(m.getId(), m.getDate(), m.getContent())).orElse(null);
     }
 
-    // 새로운 메모를 저장하거나 기존 메모를 업데이트하는 메서드
-    public void saveOrUpdateMemo(MemoDto memoDto) {
-        // 날짜 기준으로 기존 메모 검색
-        List<Memo> existingMemos = memoRepository.findAllByDate(memoDto.getDate());
-
-        // 기존 메모가 있으면 업데이트하고 없으면 새로 생성
-        if (!existingMemos.isEmpty()) {
-            Memo existingMemo = existingMemos.get(0);  // 날짜당 하나만 있다고 가정하고 첫 번째 항목 선택
-            existingMemo.setContent(memoDto.getContent());
-            memoRepository.save(existingMemo);
-        } else {
-            Memo newMemo = new Memo(memoDto.getDate(), memoDto.getContent());
+    // 기존 메모에 새로운 내용을 추가하는 메서드
+    public void appendMemoContent(LocalDate date, String newContent) {
+        List<Memo> memos = memoRepository.findAllByDate(date);
+        if (memos.isEmpty()) {
+            // 해당 날짜에 메모가 없으면 새로 저장
+            Memo newMemo = new Memo(date, newContent);
             memoRepository.save(newMemo);
+        } else {
+            // 해당 날짜에 메모가 있으면 내용 추가
+            Memo existingMemo = memos.get(0);
+            existingMemo.setContent(existingMemo.getContent() + "\n" + newContent);
+            memoRepository.save(existingMemo);
         }
     }
 

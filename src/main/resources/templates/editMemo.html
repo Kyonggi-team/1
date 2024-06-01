@@ -4,19 +4,36 @@
     <title>Edit Memo</title>
 </head>
 <body>
-<h1>Edit Memo</h1>
-<!-- 기존 메모 내용을 입력 폼에 채워 표시 -->
-<form th:action="@{/memo/update}" th:object="${memo}" method="post">
-    <!-- 메모 ID를 숨긴 필드로 전달 -->
-    <input type="hidden" th:field="*{id}" />
+<h1>메모 수정</h1>
+<!-- 메모 수정 폼 -->
+<form th:action="@{/memo/memo/update}" method="post">
+    <input type="hidden" name="id" th:value="${memo != null ? memo.id : ''}" />
     <div>
         <label for="content">Content:</label>
-        <!-- textarea에 기존 콘텐츠를 미리 채워 넣음 -->
-        <textarea id="content" th:field="*{content}" rows="10" cols="50"></textarea>
+        <textarea id="content" name="content" rows="10" cols="50" th:text="${memo != null ? memo.content : ''}"></textarea>
     </div>
     <div>
         <button type="submit">Save Changes</button>
     </div>
 </form>
+
+<!-- 슬립 수정 폼 -->
+<h2>Edit Sleep Time</h2>
+<form th:action="@{/memo/memo/sleep/update}" method="post">
+    <select name="sleepId">
+        <option th:each="sleep : ${sleeps}" th:value="${sleep.id}" th:text="${'Start: ' + sleep.start + ', End: ' + sleep.end + ', Duration: ' + sleep.durationInMinutes + ' minutes'}"></option>
+    </select>
+    <button type="submit">Edit Sleep</button>
+</form>
+
+<!-- 밀 수정 폼 -->
+<h2>Edit Meal</h2>
+<form th:action="@{/memo/memo/meals/update}" method="post">
+    <select name="mealId">
+        <option th:each="meal : ${meals}" th:value="${meal.id}" th:text="${'Time: ' + meal.time + ', Menus: ' + meal.menus + ', Rating: ' + meal.rating}"></option>
+    </select>
+    <button type="submit">Edit Meal</button>
+</form>
 </body>
 </html>
+
