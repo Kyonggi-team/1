@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Meal Plan Summary</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Meal Plan Summary</h1>
+    <h2>Evaluation for the selected period</h2>
+
+    <h3>Selected Date Range: <span th:text="${startDate} + ' to ' + ${endDate}"></span></h3>
+
+    <h4>Regularity of Meal Times:</h4>
+    <p th:text="${evaluation.timeEvaluation}"></p>
+
+    <h4>Average Self-Evaluation Score:</h4>
+    <p th:text="${evaluation.averageRating}"></p>
+
+</div>
+</body>
+</html>

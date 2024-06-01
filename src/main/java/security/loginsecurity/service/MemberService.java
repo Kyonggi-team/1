@@ -2,12 +2,15 @@ package security.loginsecurity.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import security.loginsecurity.dto.MemberDTO;
 import security.loginsecurity.member.Member;
 import security.loginsecurity.repository.MemberRepository;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -69,5 +72,19 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이메일입니다: " + email));
         member.setPassword(newPassword);  // 암호화된 비밀번호 설정
         memberRepository.save(member);
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with the email: " + email));
+    }
+
+
+
+
+    ////cnrk
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with the id: " + id));
     }
 }

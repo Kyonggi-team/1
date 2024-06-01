@@ -1,0 +1,71 @@
+/* <form action="/update-profile" method="post">
+    <!-- 이메일은 변경할 수 없으므로, 폼에서 숨김 처리 -->
+    <input type="hidden" name="email" th:value="${member.email}" />
+    
+    
+    <label for="name">이름:</label>
+    <input type="text" id="name" name="name" th:value="${member.name}" required />
+    <label for="phoneNumber">전화번호:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber" th:value="${member.phoneNumber}" required />
+    <label for="password">새 비밀번호:</label>
+    <input type="password" id="password" name="password" placeholder="New Password" required />
+    <button type="submit">프로필 업데이트</button>
+    <button onclick="location.href='/myPage'">마이페이지로 돌아가기</button>
+</form> */
+
+@font-face {
+    font-family: 'TmonMonsori';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    /* 배경 이미지 */
+    background-image: url('../bg_picture.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'TmonMonsori';
+}
+form {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 400px;
+    padding-block: 20px;
+    border-radius: 30px;
+}
+
+input{
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: rgb(245, 245, 230);
+    border-style: solid;
+    border: rgb(214, 214, 180) solid 1px;
+}
+
+button {
+    width: 170px;
+    padding-block: 10px;
+    border-radius: 30px;
+    border-style: none;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    background-color:rgb(200, 230, 224);
+    font-family: 'TmonMonsori';
+}
+
+label {
+    align-self: flex-start;
+    margin-left: 9%;
+}
