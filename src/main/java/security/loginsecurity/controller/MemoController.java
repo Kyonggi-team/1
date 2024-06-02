@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/memo/memo")
@@ -207,5 +208,30 @@ public class MemoController {
         model.addAttribute("date", date);
         model.addAttribute("moodSaved", true);
         return "memo";
+    }
+    @GetMapping("/summary")
+    public String showSummary(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                              @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                              Model model) {
+        if (startDate == null) {
+            startDate = LocalDate.now(); // 기본값 설정
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now(); // 기본값 설정
+        }
+
+        String username = getCurrentUsername();
+        Map<String, Object> evaluation = mealService.evaluateMeals(startDate, endDate, username);
+        List<SleepDto> sleeps = sleepService.getSleepsBetween(startDate, endDate, username);
+        double variance = sleepService.calculateVariance(sleeps);
+        String varianceEvaluation = sleepService.evaluateSleepVariance(variance);
+
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("evaluation", evaluation);
+        model.addAttribute("variance", variance);
+        model.addAttribute("varianceEvaluation", varianceEvaluation);
+
+        return "summary";  // summary.html 템플릿 반환
     }
 }

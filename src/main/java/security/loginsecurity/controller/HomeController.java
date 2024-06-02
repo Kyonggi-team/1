@@ -67,4 +67,12 @@ public class HomeController {
     public String redirectToPTest(){
         return "redirect:/survey";
     }
+
+    @GetMapping("/summary")
+    public String redirectToSummary() {
+        return "redirect:/memo/memo/summary";
+    }
+
+
+
 }

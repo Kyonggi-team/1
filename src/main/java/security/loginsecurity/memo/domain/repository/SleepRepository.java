@@ -20,5 +20,8 @@ public interface SleepRepository extends JpaRepository<Sleep, Long> {
     @Modifying
     @Query("DELETE FROM Sleep s WHERE s.date = :date AND s.member.id = :memberId")
     void deleteByDate(@Param("date") LocalDate date, @Param("memberId") Long memberId);
+
+    @Query("SELECT s FROM Sleep s WHERE s.date BETWEEN :startDate AND :endDate AND s.member.id = :memberId")
+    List<Sleep> findByDateBetweenAndMemberId(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("memberId") Long memberId);
 }
 
