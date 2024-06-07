@@ -185,17 +185,18 @@ public class MemoController {
             Model model) {
         String username = getCurrentUsername();
         Member currentMember = memberService.findByEmail(username);
+        if (currentMember == null) {
+            // currentMember가 null일 경우 처리
+            model.addAttribute("error", "사용자를 찾을 수 없습니다.");
+            return "error";
+        }
 
-        // 동일한 날짜에 이미 기분 데이터가 있는지 확인
         List<MoodDto> existingMoods = moodService.getMoodsByDateAndMember(date, currentMember.getId());
-        if (!existingMoods.isEmpty()) {
-            // 기존 데이터 삭제
+        if (existingMoods != null && !existingMoods.isEmpty()) {
             existingMoods.forEach(m -> moodService.deleteMoodById(m.getId()));
-            // 새 데이터 저장
             MoodDto moodDto = new MoodDto(null, date, mood);
             moodService.saveMood(moodDto, currentMember);
 
-            // 기분 업데이트 메시지 설정
             model.addAttribute("date", date);
             model.addAttribute("moodUpdated", true);
             return "memo";
@@ -204,11 +205,12 @@ public class MemoController {
         MoodDto moodDto = new MoodDto(null, date, mood);
         moodService.saveMood(moodDto, currentMember);
 
-        // 기분 선택 완료 메시지 설정
         model.addAttribute("date", date);
         model.addAttribute("moodSaved", true);
         return "memo";
     }
+
+
     @GetMapping("/summary")
     public String showSummary(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                               @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -234,4 +236,5 @@ public class MemoController {
 
         return "summary";  // summary.html 템플릿 반환
     }
+
 }

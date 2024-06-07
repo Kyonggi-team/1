@@ -6,13 +6,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import security.loginsecurity.member.Member;
+import security.loginsecurity.memo.domain.entity.Meal;
 import security.loginsecurity.memo.domain.entity.Sleep;
 import security.loginsecurity.memo.domain.repository.SleepRepository;
 import security.loginsecurity.memo.dto.SleepDto;
 import security.loginsecurity.service.MemberService;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,6 +87,9 @@ public class SleepService {
         Member member = getCurrentMember();
         sleepRepository.deleteByDate(date, member.getId());
     }
+
+
+
     //분산계산
     public double calculateVariance(List<SleepDto> sleeps) {
         double mean = sleeps.stream()

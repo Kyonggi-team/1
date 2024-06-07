@@ -44,6 +44,7 @@ public class HomeController {
 
         model.addAttribute("exercise", exerciseService.getExerciseToday(member));
         model.addAttribute("goalToday", exerciseService.getGoalToday(member));
+        model.addAttribute("memberId", member.getId());  // Add memberId to the model
 
         // home.html 띄우기
         return "home";
@@ -72,7 +73,5 @@ public class HomeController {
     public String redirectToSummary() {
         return "redirect:/memo/memo/summary";
     }
-
-
 
 }

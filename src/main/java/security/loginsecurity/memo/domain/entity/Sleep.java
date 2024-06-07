@@ -3,6 +3,7 @@ package security.loginsecurity.memo.domain.entity;
 import jakarta.persistence.*;
 import security.loginsecurity.member.Member;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -77,6 +78,10 @@ public class Sleep {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public long calculateDuration() {
+        return Duration.between(start, end).toMinutes();
     }
 
 

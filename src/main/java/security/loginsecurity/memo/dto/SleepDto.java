@@ -68,8 +68,8 @@ public class SleepDto {
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
+
     public int calculateDuration() {
         return (int) (end.toSecondOfDay() / 60 - start.toSecondOfDay() / 60);
     }
-
 }

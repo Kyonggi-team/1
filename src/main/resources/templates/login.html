@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
         body {
-            display: flex;
+            background-image: url('/assets/image/background.png');
+            background-size: cover;
+            display: flex;  
             justify-content: center;
             align-items: center;
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color:aliceblue;
-
         }
-        h2 {
+        h2 {    
             text-align: center;
             margin-bottom: 20px;
             font-family: "Comic Sans MS", cursive; /*추가*/
@@ -28,8 +29,7 @@
             padding: 20px; /*여백 크기*/ /*추가*/
             border-radius: 10px; /* 모서리 둥글게 */ /*추가*/
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */ /*추가*/
-            font-family: "Comic Sans MS", cursive;
-
+            font-family:  'Jua', sans-serif; /*추가*/
         }
         input, button {
             padding: 8px;
@@ -39,30 +39,34 @@
             width: calc(100% - 18px); /* 여백을 고려한 너비 설정 */
             margin-left: 9px; /* 왼쪽 여백 조정 */
             box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
-            font-family: "Comic Sans MS", cursive;
-        }
-        button { /*추가*/
-            background-color: #68c490; /* 버튼 배경색 설정 */
-            border: none;
-            cursor: pointer; /*버튼에 올리면 커서가 변해용*/
-            transition: background-color 0.3s ease; /* 배경색 변화는 0.3초 동안 이루어짐 */
-            font-family: "Comic Sans MS", cursive;
-        }
-        button:hover { /*추가*/
-            background-color: #3cb371; /* 버튼에 마우스 올리면 색깔 변경 */
-        }
-        a {
-            margin-top: 10px;
-            text-decoration: none; /* Remove underline from links */
-            color: blue; /* Style link color */
-        }
-        a:hover {
-            text-decoration: underline; /* Add underline on hover */
+            font-family: 'Jua', sans-serif;
+
+            button { /*추가*/
+                background-color: #68c490; /* 버튼 배경색 설정 */
+                border: none;
+                cursor: pointer; /*버튼에 올리면 커서가 변해용*/
+                transition: background-color 0.3s ease; /* 배경색 변화는 0.3초 동안 이루어짐 */
+                font-family: 'Jua', sans-serif;
+            }
+
+            button:hover { /*추가*/
+                background-color: #3cb371; /* 버튼에 마우스 올리면 색깔 변경 */
+            }
+
+            a {
+                margin-top: 10px;
+                text-decoration: none; /* Remove underline from links */
+                color: blue; /* Style link color */
+            }
+
+            a:hover {
+                text-decoration: underline; /* Add underline on hover */
+            }
         }
     </style>
 </head>
 <body>
-<img src="c:\Users\fgh30\Desktop\기초캡스톤_로고-removebg-preview.png" alt="Logo" height="200", width="500">
+    <img src="/assets/image/Logo.png" alt="Logo" class="Logo" height="200", width="500">
 <h2>Byte the blues</h2>
 <form action="/login" method="post">
     <div>

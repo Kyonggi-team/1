@@ -1,14 +1,19 @@
 package security.loginsecurity.memo.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import security.loginsecurity.member.Member;
+import security.loginsecurity.memo.domain.entity.Meal;
 import security.loginsecurity.memo.domain.entity.Mood;
 import security.loginsecurity.memo.domain.repository.MoodRepository;
 import security.loginsecurity.memo.dto.MoodDto;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,4 +48,8 @@ public class MoodService {
     public void deleteMoodById(Long id) {
         moodRepository.deleteById(id);
     }
+
+
+
+
 }

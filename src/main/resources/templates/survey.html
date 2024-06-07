@@ -5,22 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>설문조사</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        body{
+            background-image: url('/assets/image/background.png');
+            background-size: cover;
+            font-family: 'Jua', sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
         table {
+            position: relative; 
+            width: 80%;
+            max-width: 90%;
+            margin: auto;
             border-collapse: collapse;
-            width: 45%;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
         }
         th, td {
             border: 1px solid #dddddd;
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #dfefff; /* Light pastel blue */
         }
         .question-cell {
             text-align: left;
+            background-color: #f9f9ff; /* Very light blue */
         }
         .answer-cell {
             width: 50px;
+            background-color: #f9f9ff; /* Very light blue */
+        }
+        input[type="radio"] + label {
+            cursor: pointer;
+        }
+        input[type="radio"]:checked + label {
+            background-color: #dfefff; /* Light pastel blue */
+            border-radius: 50%;
+            padding: 4px;
+        }
+        h2, h3 {
+            color: #4A4A4A;
+        }
+        select, input[type="number"], button {
+            font-size: 1em;
+            padding: 5px;
+            margin: 10px;
+        }
+        button {
+            padding: 15px 30px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #88c5f7, #6ebef7);
+            border: 1px solid #88c5f7;
+            border-radius: 30px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
+            min-width: 200px;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background-color: #219ebc; /* Darker blue */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 효과 추가 */
         }
     </style>
 </head>

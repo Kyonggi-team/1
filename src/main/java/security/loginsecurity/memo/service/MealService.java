@@ -2,11 +2,11 @@ package security.loginsecurity.memo.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import security.loginsecurity.member.Member;
 import security.loginsecurity.memo.domain.entity.Meal;
+import security.loginsecurity.member.Member;
 import security.loginsecurity.memo.domain.repository.MealRepository;
 import security.loginsecurity.memo.dto.MealDto;
 import security.loginsecurity.service.MemberService;
@@ -99,50 +99,57 @@ public class MealService {
         mealRepository.deleteByMealTypeAndDateAndMemberId(mealType, date, member.getId());
     }
 
-
-
-
     //분산계산
+    @Transactional
     public Map<String, Object> evaluateMeals(LocalDate startDate, LocalDate endDate, String username) {
         Member member = getCurrentMember();
         List<Meal> meals = mealRepository.findByDateBetweenAndMemberId(startDate, endDate, member.getId());
         Map<String, List<Meal>> mealsByType = meals.stream().collect(Collectors.groupingBy(Meal::getMealType));
 
         double totalRating = 0;
-        double totalVariance = 0;
         int totalMeals = 0;
-        double[] dailyMeans = new double[mealsByType.size()];
 
-        int day = 0;
+        Map<String, Double> variancesByMealType = new HashMap<>();
+        Map<String, Double> averageTimesByMealType = new HashMap<>();
+        Map<String, Double> averageRatingsByMealType = new HashMap<>();
+
         for (Map.Entry<String, List<Meal>> entry : mealsByType.entrySet()) {
-            double dailyTotalTime = 0;
+            String mealType = entry.getKey();
             List<Meal> dailyMeals = entry.getValue();
-            for (Meal meal : dailyMeals) {
-                dailyTotalTime += meal.getTime().toSecondOfDay() / 60;
+
+            double totalTime = 0;
+            double[] times = new double[dailyMeals.size()];
+            double totalRatingByMealType = 0;
+
+            for (int i = 0; i < dailyMeals.size(); i++) {
+                Meal meal = dailyMeals.get(i);
+                times[i] = meal.getTime().toSecondOfDay() / 60.0; // 분 단위로 변환
+                totalTime += times[i];
+                totalRatingByMealType += meal.getRating();
                 totalRating += meal.getRating();
                 totalMeals++;
             }
-            double dailyMean = dailyTotalTime / dailyMeals.size();
-            dailyMeans[day++] = dailyMean;
+
+            double meanTime = totalTime / dailyMeals.size();
+            double variance = Arrays.stream(times).map(time -> Math.pow(time - meanTime, 2)).sum() / times.length;
+
+            variancesByMealType.put(mealType, variance);
+            averageTimesByMealType.put(mealType, meanTime);
+            averageRatingsByMealType.put(mealType, totalRatingByMealType / dailyMeals.size());
         }
 
-        double globalMean = Arrays.stream(dailyMeans).average().orElse(0);
+        double globalAverageRating = totalRating / totalMeals;
+        double overallVariance = variancesByMealType.values().stream().mapToDouble(Double::doubleValue).average().orElse(0);
 
-        for (double dailyMean : dailyMeans) {
-            totalVariance += Math.pow(dailyMean - globalMean, 2);
-        }
-        totalVariance /= dailyMeans.length;
-
-        double averageRating = totalRating / totalMeals;
-        String timeEvaluation = evaluateTime(totalVariance);
+        String timeEvaluation = evaluateTime(overallVariance);
 
         Map<String, Object> evaluation = new HashMap<>();
-        evaluation.put("timeVariance", totalVariance);
-        evaluation.put("averageRating", averageRating);
+        evaluation.put("variancesByMealType", variancesByMealType);
+        evaluation.put("averageTimesByMealType", averageTimesByMealType);
+        evaluation.put("averageRatingsByMealType", averageRatingsByMealType);
+        evaluation.put("globalAverageRating", globalAverageRating);
+        evaluation.put("overallVariance", overallVariance);
         evaluation.put("timeEvaluation", timeEvaluation);
-
-        // Add meal time variance to the evaluation map
-        evaluation.put("mealTimeEvaluation", timeEvaluation); // 이 부분을 수정하여 meal time variance 값을 추가합니다.
 
         return evaluation;
     }
@@ -160,7 +167,4 @@ public class MealService {
             return "규칙적인 식사시간을 갖도록 노력해봅시다";
         }
     }
-
-
-
 }

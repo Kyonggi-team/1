@@ -240,40 +240,15 @@
     <a href="/memo">메모</a>
     <a href="/survey">Survey</a>
 </div>
-<div class="container">
+<div class="summary-container">
     <div class="summary-header">
-        <span class="summary-title"><h1>Summary</h1></span>
+        <span class="summary-title"><h1>AI 요약</h1></span>
     </div>
-    <form th:action="@{/memo/memo/summary}" method="get">
-        <div class="form-group">
-            <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" name="startDate" required>
-        </div>
-        <div class="form-group">
-            <label for="endDate">End Date</label>
-            <input type="date" id="endDate" name="endDate" required>
-        </div>
-        <button type="submit">Evaluate</button>
-    </form>
-
-    <div th:if="${evaluation != null}" class="result_an">
-        <h2>식사 분석 결과</h2>
-        <p><strong>식사 메뉴 평가:</strong> <span th:text="${evaluation.globalAverageRating}"></span></p>
-        <!--<p><strong>식사 시간 분산값:</strong> <span th:text="${evaluation.overallVariance}"></span></p>-->
-        <p><strong>식사 시간 평가:</strong> <span th:text="${evaluation.timeEvaluation}"></span></p>
-
-        <!--<h3>Detailed Results</h3>
-        <div th:each="mealType, iterStat : ${evaluation.variancesByMealType}">
-            <p><strong th:text="${mealType}"></strong></p>
-            <p>Average Time: <span th:text="${evaluation.averageTimesByMealType[mealType]}"></span> minutes</p>
-            <p>Variance: <span th:text="${evaluation.variancesByMealType[mealType]}"></span></p>
-            <p>Average Rating: <span th:text="${evaluation.averageRatingsByMealType[mealType]}"></span></p>
-        </div>-->
+    <div class="summary-content">
+        <p th:text="${summary}"></p>
     </div>
-    <div th:if="${variance != null}" class="result_an">
-        <h2>수면 분석 결과</h2>
-        <!--<p><strong>수면 시간 분산:</strong> <span th:text="${variance}"></span> minutes</p>-->
-        <p><strong>수면 시간 평가:</strong> <span th:text="${varianceEvaluation}"></span></p>
+    <div>
+        <a href="/chat">Back to Chat</a>
     </div>
 </div>
 <script>

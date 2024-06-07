@@ -7,68 +7,122 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        /* 달력의 크기와 배치 */
         #calendar {
             width: 80%;
             margin: 0 auto;
             padding-top: 20px;
             padding-bottom: 20px;
+            background: rgba(255, 255, 255, 0.8); /* 투명도 적용된 배경색 */
+            border-radius: 10px;
             aspect-ratio: 4 / 3;
         }
 
+        /* 페이지 전체에 대한 레이아웃 */
         body {
-            font-family: Arial, sans-serif;
+            background-image: url('/assets/image/background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Jua', sans-serif;
             margin: 0;
-            padding: 20px;
             background-color: #f4f4f4;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        nav {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px;
+        /*나브바_햄버거 버전*/
+        .navbar {
             display: flex;
-            justify-content: center;
-            position: fixed;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed; /*스크롤을 내려도 header는 따라옴*/
             top: 0;
             width: 100%;
-            z-index: 1000;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가로 입체감 부여 */
+            height: 60px;
+            z-index: 1000; /* 다른 요소보다 항상 위에 보이도록 설정 */
         }
 
-        footer {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px;
+        .brand_logo img{
+            height: 50px;
+        }
+
+        .menu {
+            font-size: 15px;
             display: flex;
-            justify-content: center;
+            gap: 15px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .menu a:hover {
+            color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .hamburger_logo {
+            /* display: none; */
+            font-size: 30px;
+            cursor: pointer;
+            color: #007BFF;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
             position: fixed;
-            bottom: 0;
-            width: 100%;
+            top: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
             z-index: 1000;
         }
-
-        .nav-button, .footer-button {
-            padding: 10px;
-            background-color: white;
-            color: #007BFF;
+        .sidebar a {
+            padding: 8px;
+            padding-left: 32px;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
+            font-size: 20px;
+            color: #007BFF;
+            display: block;
+            transition: 0.3s;
+            transition: color 0.3s ;
+        }
+        .sidebar a:hover {
+            border-bottom: white solid 3px;
+            transition: 0s;
+            color: #0056b3;
+            transform: translateY(-2px);
         }
 
-        .nav-button:hover, .footer-button:hover {
-            background-color: #0056b3;
-            color: white;
+        .sidebar .closebtn:hover {
+            background: none;
+            border-bottom: none;
+            transition: 0s;
         }
 
+        .sidebar .closebtn {
+            position: absolute;
+            top: 10px;
+            padding: 0;
+            left: 10px;
+            font-size: 36px;
+        }
         .button-bar {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            margin-top: 80px;
         }
 
         .calendar-button {
@@ -89,6 +143,7 @@
             margin-bottom: 60px;
         }
 
+        /* 날짜 선택 시 나타나는 프레임 */
         .day-frame {
             position: absolute;
             padding: 15px;
@@ -96,7 +151,7 @@
             border: 2px solid #007BFF;
             border-radius: 5px;
             z-index: 2000;
-            display: none;
+            display: none; /* 기본적으로 숨겨둠 */
         }
 
         .day-frame a {
@@ -118,7 +173,9 @@
         .exercise {
             text-align: left;
             font-size: 20px;
-            margin-bottom: 20px;
+            padding-top: 10px;
+            margin-left: 20px;
+            margin-left: 20%;
         }
 
         .fc-event {
@@ -133,6 +190,19 @@
         }
     </style>
     <script>
+        function openNav() {
+            document.getElementById("sidebar").style.width = "200px";
+        }
+
+        function closeNav() {
+            document.getElementById("sidebar").style.width = "0";
+        }
+
+        function redirectToTodayDiary() {
+            var today = new Date().toISOString().split('T')[0];
+            var memberId = document.getElementById('memberId').value;
+            window.location.href = '/chat?date=' + today + '&memberId=' + memberId;
+        }
         $(document).ready(function() {
             function fetchMoods() {
                 return $.ajax({
@@ -154,7 +224,7 @@
                     return {
                         title: '',
                         start: mood.date,
-                        imageUrl: '/assets/mood/' + moodImageMap[mood.mood]
+                        imageUrl: '/assets/mood/' + moodImageMap[mood.mood] // 각 기분에 맞는 이미지를 사용할 경로
                     };
                 });
 
@@ -175,17 +245,23 @@
                     },
                     dayClick: function(date, jsEvent) {
                         var formattedDate = date.format('YYYY-MM-DD');
+                        var memberId = $('#memberId').val(); // Hidden input field with memberId
 
+                        // 날짜 클릭 시 프레임의 위치와 내용을 설정하고 표시
                         var frame = $('#day-frame');
                         frame.css({
                             left: jsEvent.pageX + 'px',
                             top: jsEvent.pageY + 'px'
                         });
                         frame.find('.memo-link').attr('href', '/memo?date=' + formattedDate);
+                        frame.find('.chat-link').attr('href', '/chat?date=' + formattedDate + '&memberId=' + memberId);
+                        frame.find('.chatsummary-link').attr('href', '/chatSummary?date=' + formattedDate + '&memberId=' + memberId);
+                        frame.find('.summary-link').attr('href', '/memo/memo/summary?date=' + formattedDate);
                         frame.show();
                     }
                 });
 
+                // 프레임 외부 클릭 시 프레임 숨기기
                 $(document).on('click', function(e) {
                     var frame = $('#day-frame');
                     if (!frame.is(e.target) && frame.has(e.target).length === 0) {
@@ -197,28 +273,42 @@
     </script>
 </head>
 <body>
-<nav>
-    <span>Byte The Bive</span>
-</nav>
+<div class="navbar">
+    <!--&#9776 햄버거 메뉴-->
+    <div class="brand_logo"><a href="#"><img src="/assets/image/Logo.png" alt="Byte the Blues"></a></div>
+    <span class="hamburger_logo" onclick="openNav()">&#9776;</span>
+</div>
+
+<!--가로 600px미만-->
+<div id="sidebar" class="sidebar">
+    <!--&times 닫기 버튼-->
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="/logout">로그아웃</a>
+    <a href="/">홈으로</a>
+    <a href="/myPage">마이페이지</a>
+    <a href="javascript:void(0);" onclick="redirectToTodayDiary()">AI다이어리</a>
+    <a href="/memo">메모</a>
+    <a href="/survey">Survey</a>
+</div>
+
 <div class="container">
     <div class="exercise">
         <p>오늘의 목표는 <span th:text="${exercise}"></span> <span th:text="${goalToday}"></span>개(분)입니다.</p>
     </div>
     <div class="button-bar">
-        <a class="calendar-button" href="/aiDiary">AI Diary</a>
+        <a class="calendar-button" href="javascript:void(0);" onclick="redirectToTodayDiary()">AI Diary</a>
         <a class="calendar-button" href="/memo">Memo</a>
-        <a class="calendar-button" href="/survey">P Test</a>
+        <a class="calendar-button" href="/survey">Survey</a>
     </div>
     <div id="calendar"></div>
+    <!-- 날짜 선택 시 나타나는 프레임 -->
     <div id="day-frame" class="day-frame">
         <a class="memo-link" href="#">Memo</a>
-        <a href="/aiDiary">AI Diary</a>
-        <a href="/summary">Summary</a>
+        <a class="chat-link" href="#">AI Diary</a>
+        <a class="chatsummary-link" href="#">Chat 요약</a>
+        <a class="summary-link" href="#">Summary</a>
     </div>
 </div>
-<footer>
-    <a class="footer-button" href="/">Home</a>
-    <a class="footer-button" href="/myPage">Mypage</a>
-</footer>
+<input type="hidden" id="memberId" th:value="${memberId}">
 </body>
 </html>

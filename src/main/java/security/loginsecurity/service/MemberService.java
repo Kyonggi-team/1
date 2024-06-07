@@ -2,12 +2,15 @@ package security.loginsecurity.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import security.loginsecurity.dto.MemberDTO;
 import security.loginsecurity.member.Member;
 import security.loginsecurity.repository.MemberRepository;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
